@@ -1,0 +1,32 @@
+{
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit"
+	},
+	"[python]": {
+		"editor.defaultFormatter": "ms-python.black-formatter",
+		"editor.formatOnSave": true
+	},
+	"[rust]": {
+		"editor.defaultFormatter": "rust-lang.rust-analyzer",
+		"editor.formatOnSave": true
+	},
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svelte-kit": true,
+		"**/__pycache__": true,
+		"**/*.pyc": true,
+		"**/node_modules": true,
+		"**/target": true,
+		"**/.turbo": true
+	},
+	"search.exclude": {
+		"**/node_modules": true,
+		"**/target": true,
+		"**/.svelte-kit": true,
+		"**/.turbo": true,
+		"**/dist": true,
+		"**/build": true
+	}
+}

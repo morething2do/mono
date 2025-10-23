@@ -1,0 +1,25 @@
+{
+  "name": "desktop",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tsc && vite build && tauri build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist node_modules src-tauri/target"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-opener": "^2",
+    "@tauri-apps/plugin-shell": "^2"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2",
+    "@types/node": "^22.10.2",
+    "vite": "^6.0.3",
+    "typescript": "^5.7.2"
+  }
+}
