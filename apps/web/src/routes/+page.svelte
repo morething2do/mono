@@ -1,7 +1,9 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/button.svelte';
 	import Card from '$lib/components/ui/card.svelte';
-	import { Home, BarChart3, Users, Settings, Menu } from 'lucide-svelte';
+	import LineChart from '$lib/components/charts/LineChart.svelte';
+	import BarChart from '$lib/components/charts/BarChart.svelte';
+	import { Home, BarChart3, Users, Settings, Menu, TrendingUp, DollarSign, Activity, UserPlus } from 'lucide-svelte';
 
 	let sidebarOpen = $state(true);
 
@@ -13,10 +15,54 @@
 	];
 
 	const stats = [
-		{ label: '总用户', value: '2,543', change: '+12.5%' },
-		{ label: '活跃用户', value: '1,843', change: '+8.2%' },
-		{ label: '收入', value: '¥45,231', change: '+23.1%' },
-		{ label: '转化率', value: '3.24%', change: '+2.4%' }
+		{ label: '总用户', value: '2,543', change: '+12.5%', icon: Users, trend: 'up' },
+		{ label: '活跃用户', value: '1,843', change: '+8.2%', icon: Activity, trend: 'up' },
+		{ label: '收入', value: '¥45,231', change: '+23.1%', icon: DollarSign, trend: 'up' },
+		{ label: '转化率', value: '3.24%', change: '+2.4%', icon: TrendingUp, trend: 'up' }
+	];
+
+	// 用户增长数据
+	const userGrowthData = {
+		labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
+		datasets: [
+			{
+				label: '新用户',
+				data: [65, 89, 102, 134, 165, 189],
+				borderColor: 'rgb(59, 130, 246)',
+				backgroundColor: 'rgba(59, 130, 246, 0.1)',
+				fill: true,
+				tension: 0.4
+			}
+		]
+	};
+
+	// 收入分析数据
+	const revenueData = {
+		labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
+		datasets: [
+			{
+				label: '收入 (¥)',
+				data: [12000, 19000, 15000, 25000, 32000, 45231],
+				backgroundColor: [
+					'rgba(59, 130, 246, 0.8)',
+					'rgba(59, 130, 246, 0.8)',
+					'rgba(59, 130, 246, 0.8)',
+					'rgba(59, 130, 246, 0.8)',
+					'rgba(59, 130, 246, 0.8)',
+					'rgba(59, 130, 246, 0.8)'
+				],
+				borderColor: 'rgb(59, 130, 246)',
+				borderWidth: 1
+			}
+		]
+	};
+
+	const recentUsers = [
+		{ name: '张三', email: 'zhangsan@example.com', status: '活跃', date: '2024-01-15', avatar: '👤' },
+		{ name: '李四', email: 'lisi@example.com', status: '活跃', date: '2024-01-14', avatar: '👤' },
+		{ name: '王五', email: 'wangwu@example.com', status: '离线', date: '2024-01-13', avatar: '👤' },
+		{ name: '赵六', email: 'zhaoliu@example.com', status: '活跃', date: '2024-01-12', avatar: '👤' },
+		{ name: '钱七', email: 'qianqi@example.com', status: '离线', date: '2024-01-11', avatar: '👤' }
 	];
 </script>
 
@@ -25,7 +71,7 @@
 	<aside
 		class="w-64 border-r bg-card transition-all duration-300 {sidebarOpen
 			? 'translate-x-0'
-			: '-translate-x-full'}"
+			: '-translate-x-full'} fixed left-0 top-0 z-40 h-full md:relative"
 	>
 		<div class="flex h-16 items-center border-b px-6">
 			<h1 class="text-xl font-bold">Monorepo 模板</h1>
@@ -67,64 +113,81 @@
 			<div class="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 				{#each stats as stat}
 					<Card class="p-6">
-						<div class="text-sm font-medium text-muted-foreground">{stat.label}</div>
+						<div class="flex items-center justify-between">
+							<div class="text-sm font-medium text-muted-foreground">{stat.label}</div>
+							<svelte:component this={stat.icon} class="h-4 w-4 text-muted-foreground" />
+						</div>
 						<div class="mt-2 flex items-baseline">
 							<div class="text-2xl font-bold">{stat.value}</div>
-							<div class="ml-2 text-sm font-medium text-green-600">{stat.change}</div>
+							<div class="ml-2 text-sm font-medium text-green-600 flex items-center gap-1">
+								<TrendingUp class="h-3 w-3" />
+								{stat.change}
+							</div>
 						</div>
 					</Card>
 				{/each}
 			</div>
 
 			<!-- 图表区域 -->
-			<div class="grid gap-4 md:grid-cols-2">
+			<div class="grid gap-4 md:grid-cols-2 mb-4">
 				<Card class="p-6">
 					<h3 class="mb-4 text-lg font-semibold">用户增长趋势</h3>
-					<div class="flex h-64 items-center justify-center border-2 border-dashed rounded-lg">
-						<p class="text-muted-foreground">图表占位符</p>
+					<div class="h-64">
+						<LineChart data={userGrowthData} />
 					</div>
 				</Card>
 
 				<Card class="p-6">
 					<h3 class="mb-4 text-lg font-semibold">收入分析</h3>
-					<div class="flex h-64 items-center justify-center border-2 border-dashed rounded-lg">
-						<p class="text-muted-foreground">图表占位符</p>
+					<div class="h-64">
+						<BarChart data={revenueData} />
 					</div>
 				</Card>
 			</div>
 
 			<!-- 数据表格 -->
-			<Card class="mt-4 p-6">
-				<h3 class="mb-4 text-lg font-semibold">最近的用户</h3>
+			<Card class="p-6">
+				<div class="mb-4 flex items-center justify-between">
+					<h3 class="text-lg font-semibold">最近的用户</h3>
+					<Button size="sm">
+						<UserPlus class="mr-2 h-4 w-4" />
+						添加用户
+					</Button>
+				</div>
 				<div class="overflow-x-auto">
 					<table class="w-full">
 						<thead>
 							<tr class="border-b">
-								<th class="pb-3 text-left text-sm font-medium text-muted-foreground">用户名</th>
+								<th class="pb-3 text-left text-sm font-medium text-muted-foreground">用户</th>
 								<th class="pb-3 text-left text-sm font-medium text-muted-foreground">邮箱</th>
 								<th class="pb-3 text-left text-sm font-medium text-muted-foreground">状态</th>
 								<th class="pb-3 text-left text-sm font-medium text-muted-foreground">注册日期</th>
+								<th class="pb-3 text-left text-sm font-medium text-muted-foreground">操作</th>
 							</tr>
 						</thead>
 						<tbody>
-							{#each [
-								{ name: '张三', email: 'zhangsan@example.com', status: '活跃', date: '2024-01-15' },
-								{ name: '李四', email: 'lisi@example.com', status: '活跃', date: '2024-01-14' },
-								{ name: '王五', email: 'wangwu@example.com', status: '离线', date: '2024-01-13' }
-							] as user}
-								<tr class="border-b">
-									<td class="py-3 text-sm">{user.name}</td>
+							{#each recentUsers as user}
+								<tr class="border-b hover:bg-muted/50 transition-colors">
+									<td class="py-3 text-sm">
+										<div class="flex items-center gap-2">
+											<span class="text-2xl">{user.avatar}</span>
+											<span class="font-medium">{user.name}</span>
+										</div>
+									</td>
 									<td class="py-3 text-sm text-muted-foreground">{user.email}</td>
 									<td class="py-3 text-sm">
 										<span
-											class="rounded-full px-2 py-1 text-xs {user.status === '活跃'
-												? 'bg-green-100 text-green-700'
-												: 'bg-gray-100 text-gray-700'}"
+											class="rounded-full px-2 py-1 text-xs font-medium {user.status === '活跃'
+												? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+												: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400'}"
 										>
 											{user.status}
 										</span>
 									</td>
 									<td class="py-3 text-sm text-muted-foreground">{user.date}</td>
+									<td class="py-3 text-sm">
+										<Button variant="ghost" size="sm">查看</Button>
+									</td>
 								</tr>
 							{/each}
 						</tbody>

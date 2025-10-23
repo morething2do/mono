@@ -45,6 +45,49 @@ program
     console.log(chalk.yellow("📦 Monorepo 项目模板"));
     console.log(chalk.gray("版本: 0.1.0"));
     console.log(chalk.gray("运行时: Bun"));
+    console.log(chalk.gray(""));
+    console.log(chalk.green("项目结构:"));
+    console.log(chalk.gray("  - apps/api: Python FastAPI 后端"));
+    console.log(chalk.gray("  - apps/web: Svelte 前端"));
+    console.log(chalk.gray("  - apps/desktop: Tauri 桌面应用"));
+    console.log(chalk.gray("  - packages/cli: CLI 工具"));
+  });
+
+program
+  .command("api")
+  .description("与 API 服务交互")
+  .option("-u, --url <url>", "API URL", "http://localhost:8000")
+  .action(async (options) => {
+    const spinner = ora("正在连接 API 服务...").start();
+    
+    try {
+      const response = await fetch(`${options.url}/api/health`);
+      const data = await response.json();
+      
+      spinner.succeed(chalk.green("API 服务运行正常"));
+      console.log(chalk.gray(JSON.stringify(data, null, 2)));
+    } catch (error) {
+      spinner.fail(chalk.red("无法连接到 API 服务"));
+      console.log(chalk.gray(`请确保 API 服务正在运行: ${options.url}`));
+    }
+  });
+
+program
+  .command("items")
+  .description("获取数据项列表")
+  .option("-u, --url <url>", "API URL", "http://localhost:8000")
+  .action(async (options) => {
+    const spinner = ora("正在获取数据项...").start();
+    
+    try {
+      const response = await fetch(`${options.url}/api/items`);
+      const data = await response.json() as any[];
+      
+      spinner.succeed(chalk.green(`获取到 ${data.length} 个数据项`));
+      console.log(chalk.gray(JSON.stringify(data, null, 2)));
+    } catch (error) {
+      spinner.fail(chalk.red("无法获取数据项"));
+    }
   });
 
 program.parse();
