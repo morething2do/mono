@@ -1,0 +1,11 @@
+{
+  "name": "api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "uv run dev",
+    "start": "uv run start",
+    "test": "uv run pytest",
+    "clean": "rm -rf .venv __pycache__ .pytest_cache"
+  }
+}
