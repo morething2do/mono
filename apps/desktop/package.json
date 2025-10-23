@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tauri dev",
-    "build": "tsc && vite build && tauri build",
+    "build": "cd ../web && bun run build && cd ../desktop && tauri build",
     "preview": "vite preview",
     "tauri": "tauri",
     "type-check": "tsc --noEmit",
@@ -14,7 +14,8 @@
   "dependencies": {
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2",
-    "@tauri-apps/plugin-shell": "^2"
+    "@tauri-apps/plugin-shell": "^2",
+    "web": "workspace:*"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2",

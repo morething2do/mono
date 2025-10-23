@@ -4,10 +4,10 @@
   "version": "0.1.0",
   "identifier": "com.monorepo.desktop",
   "build": {
-    "beforeDevCommand": "vite",
-    "devUrl": "http://localhost:5174",
-    "beforeBuildCommand": "tsc && vite build",
-    "frontendDist": "../dist"
+    "beforeDevCommand": "cd ../web && bun run dev",
+    "devUrl": "http://localhost:5173",
+    "beforeBuildCommand": "cd ../web && bun run build",
+    "frontendDist": "../web/.svelte-kit/output/client"
   },
   "app": {
     "withGlobalTauri": true,
