@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    __alpha_lib::run()
+    monorepo_desktop_lib::run()
 }
